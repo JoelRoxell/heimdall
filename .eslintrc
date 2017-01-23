@@ -1,0 +1,41 @@
+{
+  "env": {
+    "es6": true,
+    "mocha": true
+  },
+  "extends" : [
+    "standard",
+    "google"
+  ],
+  "rules": {
+    "eqeqeq": 0,
+    "max-len": [2, 120, 2],
+    "strict": "error",
+    "semi" : [2, "always"],
+    "quotes": [2, "single", {
+      "allowTemplateLiterals": true,
+      "avoidEscape": true
+    }],
+    "object-curly-spacing": ["error", "always", {
+      "objectsInObjects": false,
+      "arraysInObjects": false
+    }],
+    "no-unused-expressions": 0,
+    "comma-dangle": ["error", "never"],
+    "arrow-parens": ["error", "as-needed"],
+    "require-jsdoc": ["error", {
+        "require": {
+            "FunctionDeclaration": false,
+            "MethodDefinition": false,
+            "ClassDeclaration": true
+        }
+    }],
+    "operator-linebreak": ["error", "after"],
+    "newline-after-var": ["error", "always"],
+    "no-invalid-this": 0
+  },
+  "parserOptions": {
+    "sourceType": "script",
+    "ecmaVersion": 2017
+  }
+}

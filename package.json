@@ -1,0 +1,63 @@
+{
+  "name": "heimdall",
+  "version": "0.1.0",
+  "description": "Microservice boilerplate for Node.js applications, to quickly spin up new services.",
+  "main": "src/heimdall.js",
+  "scripts": {
+    "test": "docker exec -it $(./scripts/containername.sh) bash ./scripts/test.sh",
+    "cov": "docker exec -it $(./scripts/containername.sh) bash ./scripts/coverage.sh",
+    "test:watch": "docker exec -it $(./scripts/containername.sh) bash ./scripts/watch.sh",
+    "precommit": "./node_modules/.bin/eslint src/",
+    "bash": "docker exec -it $(./scripts/containername.sh) bash",
+    "reinstall": "docker exec -it $(./scripts/containername.sh) ./scripts/reinstall.sh",
+    "open:cov": "python -m webbrowser \"coverage/lcov-report/index.html\""
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "Docker",
+    "Nodejs",
+    "Microservice",
+    "Authentication"
+  ],
+  "author": "Joel Roxell<joel.roxell@na-kd.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.7.1",
+    "eslint-config-google": "^0.7.1",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "flow-bin": "^0.36.0",
+    "husky": "^0.11.9",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "nyc": "^8.3.1"
+  },
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "chai-things": "^0.2.0",
+    "debug": "^2.6.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "jsonwebtoken": "^7.2.1",
+    "koa": "^2.0.0",
+    "koa-accesslog": "^0.0.2",
+    "koa-bodyparser": "^3.2.0",
+    "koa-multer": "^1.0.1",
+    "koa-router": "^7.0.1",
+    "mongodb": "^2.2.12",
+    "mongoose": "^4.7.2",
+    "multer": "^1.2.1",
+    "query-string": "^4.2.3",
+    "redis": "^2.6.5",
+    "sinon": "^1.17.7",
+    "sinon-as-promised": "^4.0.2"
+  }
+}

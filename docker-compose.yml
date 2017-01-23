@@ -1,0 +1,31 @@
+version: '2'
+services:
+  heimdall: # Main
+    build: .
+    env_file:
+      - variables.env
+    environment:
+      NODE_ENV: 'development'
+      PORT: 8000
+    volumes:
+      - ./src:/home/node/app/src
+      - ./scripts:/home/node/app/scripts
+      - ./package.json:/home/node/app/package.json
+      - ./.nycrc:/home/node/app/.nycrc
+      - ./coverage:/home/node/app/coverage
+    ports:
+      - 80:8000
+      - 9222:9222
+    links:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./resources/data/db:/data/db
+    ports:
+      - 27017:27017
+
+  redis:
+    image: redis
