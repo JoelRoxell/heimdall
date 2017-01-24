@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const encrypt = require('../utils/encrypt');
+
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -38,24 +40,7 @@ UserSchema.virtual('jwtCount').get(function getJwtCount() {
   return this.jwts.length; // eslint-disable-line
 });
 
-// Hash users passords.
-UserSchema.pre('save', function(next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-
-  bcrypt.genSalt(Number.parseInt(process.env.SALT_ROUNDS, 10) || 10, (err, salt) => {
-    if (err) throw err;
-
-    bcrypt.hash(this.password, salt, (err, hash) => {
-      if (err) throw err;
-
-      this.password = hash;
-
-      next();
-    });
-  });
-});
+UserSchema.pre('save', encrypt);
 
 const UserModel = mongoose.model('user', UserSchema);
 

@@ -16,6 +16,8 @@ services:
     ports:
       - 80:8000
       - 9222:9222
+      - 9223:9223
+      - 5858:5858
     links:
       - mongo
       - redis

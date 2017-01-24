@@ -9,17 +9,17 @@ chai.use(require('chai-things'));
 
 mongoose.Promise = global.Promise;
 
-before(done => {
-  mongoose.connect(`mongodb://mongo/authentication_${process.env.NODE_ENV}`);
-  mongoose.connection
-    .once('open', () => done())
-    .on('error', error => console.log('error', error)
-  );
-});
-
-after(() => {
-  mongoose.connection.close();
-});
+// before(done => {
+//   mongoose.connect(`mongodb://mongo/authentication_${process.env.NODE_ENV}`);
+//   mongoose.connection
+//     .once('open', () => done())
+//     .on('error', error => console.log('error', error)
+//   );
+// });
+//
+// after(() => {
+//   mongoose.connection.close();
+// });
 
 function tareDownCollection(collection) {
   return new Promise(function(resolve, reject) {
