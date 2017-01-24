@@ -6,50 +6,61 @@ const sinon = require('sinon');
 const { expect } = require('../utils/test-helper');
 const registerUser = require('./user-controller').registerUser;
 const factory = require('../utils/factory');
-const { encrypt } = require('../utils/encrypt');
+const encrypt = require('../utils/encrypt');
 
 describe('user-controller', () => {
   let ctx;
+  let create;
+  let userParams;
 
   describe('register', () => {
     beforeEach(function() {
       ctx = {
         request: {
           body: {}
-        }
+        },
+        body: {}
       };
-    });
 
-    it('should register a user', async function() {
-      let create = sinon.stub(factory, 'create');
-      let userParams = {
+      create = sinon.stub(factory, 'create');
+      userParams = {
         email: 'test@test.com',
         password: 'someTestPassword',
         isModified: () => true,
         encrypt,
         save: function() {
-          return this.encrypt();
+          return new Promise((resolve, reject) => {
+            this.encrypt(() => {
+              resolve(this);
+            });
+          })
         }
       };
 
       create.returns(userParams);
+    });
 
+    afterEach(function() {
+      create.restore();
+    })
+
+    it('should register a user', async function() {
       try {
-        ctx.request.body = userParams;
+        ctx.request.body = {
+          email: 'test@test.com',
+          password: 'someTestPassword'
+        };
 
         await registerUser(ctx, () => {});
 
-        console.log(ctx);
-
-        expect(ctx.request.body.email).to.equal(ctx.request.body.email);
-      } catch (e) {
-        console.log(e);
+        expect(ctx.body.email).to.equal(ctx.request.body.email);
+        expect(ctx.body).to.have.property('password');
+      } catch (err) {
+        throw err;
       }
-
-      create.restore();
     });
 
-    xit('should fail to register a user: email', async () => {
+    it('should fail to register a user: email', async () => {
       try {
         ctx.request.body = {
           email: 'test@test.c',
@@ -58,6 +69,7 @@ describe('user-controller', () => {
 
         await registerUser(ctx, () => {});
       } catch (e) {
+        console.log(e);
         if (e instanceof MongooseError) {
           expect(e.errors.email.message).to.equal('Email must be a valid email address');
         } else {

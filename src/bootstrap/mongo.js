@@ -21,9 +21,9 @@ function initMongo() {
 
     mongoose.connection
       .once('open', () => {
-        resolve();
+        debug('connected to mongo');
       })
-      .on('error', err => reject(err));
+      .on('error', err => debug(err));
   });
 }
 

@@ -3,6 +3,7 @@
 const Router = require('koa-router');
 
 const factory = require('../utils/factory');
+const UserModel = require('../models/user-model');
 
 const MongooseError = require('mongoose').Error;
 const userCtrl = new Router();
@@ -19,10 +20,10 @@ async function registerUser(ctx, next) {
   }
 
   if (!password) {
-    throw new Error('Missing password parameters');
+    throw new Error('Missing password parameter');
   }
 
-  const newUser = factory.create('Model', {
+  const newUser = factory.create('User', {
     email,
     password
   });
