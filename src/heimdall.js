@@ -9,6 +9,18 @@ const controllers = require('./controllers');
 
 const heimdall = new Koa();
 
+heimdall.use(async function errorHandler(ctx, next) {
+  try {
+    await next();
+  } catch (e) {
+    ctx.status = 400;
+
+    if (!process.env.NODE_ENV !== 'production') {
+      ctx.body = e.message;
+    }
+  }
+});
+
 heimdall.use(accesslog());
 heimdall.use(bodyParser());
 

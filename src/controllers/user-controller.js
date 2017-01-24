@@ -3,6 +3,7 @@
 const Router = require('koa-router');
 
 const UserModel = require('../models/user-model');
+const MongooseError = require('mongoose').Error;
 
 const userCtrl = new Router();
 
@@ -36,6 +37,10 @@ async function registerUser(ctx, next) {
   try {
     registerdUser = await newUser.save();
   } catch (e) {
+    e instanceof MongooseError ?
+      e.status = 400 :
+      e.status = 500;
+
     throw e;
   }
 
