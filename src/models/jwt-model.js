@@ -15,6 +15,6 @@ const JWTSchema = new Schema({
   }
 });
 
-const JWTModel = mongoose.model('JWT', JWTSchema);
+const JWTModel = mongoose.model('jwts', JWTSchema);
 
 module.exports = JWTModel;
