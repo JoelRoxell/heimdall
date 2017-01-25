@@ -10,37 +10,28 @@ const jwtUtil = require('../utils/jwt-util');
 async function signIn(ctx, next) {
   const { email, password } = ctx.request.body;
 
-  try {
-    const user = await UserModel.findByEmail(email);
-    const valid = await user.authenticate(password);
+  const user = await UserModel.findByEmail(email);
+  const valid = await user.authenticate(password);
 
-    if (!valid) {
-      const error = new Error('Authentication failed');
+  if (!valid) {
+    const error = new Error('Authentication failed');
 
-      error.status = 403;
+    error.status = 401;
 
-      throw error;
-    }
-
-    const tokenPayload = factory.create('Jwt', {
-      sub: user._id,
-      exp: Math.floor(Date.now() / 1000) + (60 * process.env.TOKEN_EXP_MINUTES || 15),
-      data: user.toJSON()
-    });
-
-    const signedToken = await jwtUtil.createToken(tokenPayload.toJSON());
-
-    ctx.status = 200;
-    ctx.body = { token: signedToken };
-  } catch (e) {
-    console.log(e);
+    throw error;
   }
-}
 
-async function signOut(ctx) {
-  ctx.body = 'terminated';
-}
+  const tokenPayload = factory.create('Jwt', {
+    sub: user._id,
+    exp: Math.floor(Date.now() / 1000) + (60 * process.env.TOKEN_EXP_MINUTES || 15),
+    data: user.toJSON()
+  });
 
+  const signedToken = await jwtUtil.createToken(tokenPayload.toJSON());
+
+  ctx.status = 200;
+  ctx.body = { token: signedToken };
+}
 
 const authenticateCtrl = new Router();
 
@@ -52,10 +43,8 @@ authenticateCtrl.post('/sign-in', validateFields({
     type: String
   }
 }), signIn);
-authenticateCtrl.post('/sign-out', signOut);
 
 module.exports = {
   router: authenticateCtrl,
-  signIn,
-  signOut
+  signIn
 };

@@ -17,6 +17,6 @@ JWTSchema.options.toJSON.transform = function(doc, ret, options) {
   return ret;
 };
 
-const JWTModel = mongoose.model('jwts', JWTSchema);
+const JWTModel = mongoose.model('jwt', JWTSchema);
 
 module.exports = JWTModel;

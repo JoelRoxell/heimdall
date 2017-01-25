@@ -50,10 +50,6 @@ UserSchema.methods.authenticate = function authenticate(candidatePassword) {
   }.bind(this));
 };
 
-UserSchema.virtual('jwtCount').get(function getJwtCount() {
-  return this.jwts.length; // eslint-disable-line
-});
-
 UserSchema.pre('save', encrypt);
 
 const UserModel = mongoose.model('user', UserSchema);
