@@ -4,15 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const JWTSchema = new Schema({
-  sub: String,
-  role: {
-    type: String,
-    default: null
-  },
-  blacklisted: {
-    type: Boolean,
-    default: false
-  }
+  sub: String
 });
 
 const JWTModel = mongoose.model('jwts', JWTSchema);

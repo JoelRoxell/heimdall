@@ -1,10 +1,13 @@
 'use strict';
 
+const sinon = require('sinon');
+
 const { expect } = require('../utils/test-helper');
 const UserModel = require('./user-model');
 const JWTModel = require('./jwt-model');
+const encrypt = require('../utils/encrypt');
 
-xdescribe('User model', () => {
+describe('User model', () => {
   it('should require an email', () => {
     const user = new UserModel();
     const validation = user.validateSync();
@@ -29,38 +32,40 @@ xdescribe('User model', () => {
     });
   });
 
-  xit('should add a jwt to a use', done => {
+  it('should add a jwt to a use', () => {
     const user = new UserModel({
       email: 'test.test@test.com',
       password: 'test'
     });
 
-    new JWTModel()
-      .save()
-      .then(doc => {
-        user.jwts.push(doc);
-        return user.save();
-      })
-      .then(doc => {
-        expect(user.jwtCount).to.equal(1);
-        done();
-      }).catch(err => {
-        console.log(err);
-      });
+    const jwt = new JWTModel({
+      sub: user._id
+    });
+
+    user.jwts.push(jwt);
+
+    expect(user.jwts[0]).to.equal(jwt._id);
   });
 
-  xit(`should create a user and validate it's credentials`, function(done) {
+  it(`should create a user and provide valid credentials`, function(done) {
     const user = new UserModel({
       email: 'aValid@email.com',
       password: 'SomeCoolPassword'
     });
 
-    user.save()
-      .then(() => user.authenticate('SomeCoolPassword'))
-      .then(res => {
-        expect(res).to.equal(true);
+    const save = sinon.stub(user, 'save');
 
-        done();
-      });
+    save.returns(Promise.resolve(user));
+
+    encrypt.call(user, function() {
+      user.save()
+        .then(() => user.authenticate('SomeCoolPassword'))
+        .then(res => {
+          save.restore();
+
+          expect(res).to.equal(true);
+          done();
+        });
+    });
   });
 });

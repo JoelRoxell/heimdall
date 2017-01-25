@@ -3,7 +3,6 @@
 const Router = require('koa-router');
 
 const factory = require('../utils/factory');
-const UserModel = require('../models/user-model');
 
 const MongooseError = require('mongoose').Error;
 const userCtrl = new Router();

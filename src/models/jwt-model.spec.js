@@ -1,17 +1,13 @@
 'use strict';
 
-const { expect, tareDownCollection } = require('../utils/test-helper');
+const { expect } = require('../utils/test-helper');
 
 const JWTModel = require('./jwt-model');
 
-xdescribe('JWT model', () => {
-  before(async () => {
-    await tareDownCollection('jwts');
-  });
-
+describe('JWT model', () => {
   it('should create models', () => {
     const jwt = new JWTModel();
 
-    expect(jwt).to.exist;
+    expect(jwt).to.have.property('sub');
   });
 });

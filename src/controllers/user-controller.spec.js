@@ -33,7 +33,7 @@ describe('user-controller', () => {
             this.encrypt(() => {
               resolve(this);
             });
-          })
+          });
         }
       };
 
@@ -42,7 +42,7 @@ describe('user-controller', () => {
 
     afterEach(function() {
       create.restore();
-    })
+    });
 
     it('should register a user', async function() {
       try {
@@ -78,7 +78,7 @@ describe('user-controller', () => {
       }
     });
 
-    xit('should fail to register a user: password', async () => {
+    it('should fail to register a user: password', async () => {
       try {
         ctx.request.body = {
           email: 'test@test.c'
@@ -86,7 +86,7 @@ describe('user-controller', () => {
 
         await registerUser(ctx, () => {});
       } catch (e) {
-        expect(e.message).to.equal('Missing password parameters');
+        expect(e.message).to.equal('Missing password parameter');
       }
     });
   });

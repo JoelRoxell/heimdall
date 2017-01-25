@@ -5,5 +5,5 @@ if [ "$NODE_ENV" = "production" ]; then
 elif [ "$NODE_ENV" = "development" ]; then
   echo "Running in development mode. Installing dev-dependencies..."
   yarn
-  DEBUG=* ./node_modules/.bin/nodemon --inspect=9222 --harmony-async-await src/heimdall.js
+  DEBUG=* ./node_modules/.bin/nodemon --inspect --harmony-async-await src/heimdall.js
 fi

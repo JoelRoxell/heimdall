@@ -20,7 +20,6 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'password is required']
   },
-  salt: String,
   jwts: [{
     type: Schema.Types.ObjectId,
     ref: 'jwt'

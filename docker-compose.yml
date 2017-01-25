@@ -15,7 +15,7 @@ services:
       - ./coverage:/home/node/app/coverage
     ports:
       - 80:8000
-      - 9222:9222
+      - 9229:9229
       - 9223:9223
     links:
       - mongo
