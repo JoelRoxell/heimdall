@@ -7,8 +7,6 @@ const factory = require('../utils/factory');
 const UserModel = require('../models/user-model');
 const jwtUtil = require('../utils/jwt-util');
 
-const authenticateCtrl = new Router();
-
 async function signIn(ctx, next) {
   const { email, password } = ctx.request.body;
 
@@ -33,7 +31,7 @@ async function signIn(ctx, next) {
     const signedToken = await jwtUtil.createToken(tokenPayload.toJSON());
 
     ctx.status = 200;
-    ctx.body = signedToken;
+    ctx.body = { token: signedToken };
   } catch (e) {
     console.log(e);
   }
@@ -43,6 +41,9 @@ async function signOut(ctx) {
   ctx.body = 'terminated';
 }
 
+
+const authenticateCtrl = new Router();
+
 authenticateCtrl.post('/sign-in', validateFields({
   email: {
     type: String
@@ -51,7 +52,6 @@ authenticateCtrl.post('/sign-in', validateFields({
     type: String
   }
 }), signIn);
-
 authenticateCtrl.post('/sign-out', signOut);
 
 module.exports = {

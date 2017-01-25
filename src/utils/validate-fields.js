@@ -46,6 +46,8 @@ module.exports = function validateFields(requiredFields) {
 
         throw error;
       }
+
+      await next();
     } catch (e) {
       throw e;
     }
