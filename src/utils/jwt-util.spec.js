@@ -21,6 +21,7 @@ describe('jwt util', () => {
     const token = await jwtUtil.createToken({
       foo: 'bar'
     });
+
     let splittedJwt = token.split('.');
 
     const encodedPayload = new Buffer(splittedJwt[1], 'base64').toString();

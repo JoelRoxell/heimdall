@@ -26,6 +26,20 @@ const UserSchema = new Schema({
   }]
 });
 
+// Remove critical data from JSON outputs.
+if (!UserSchema.options.toJSON) UserSchema.options.toJSON = {};
+UserSchema.options.toJSON.transform = function toJSON(doc, ret, options) {
+  delete ret._id;
+  delete ret.password;
+  delete ret.jwts;
+
+  return ret;
+};
+
+UserSchema.statics.findByEmail = function findByEmail(email) {
+  return this.findOne({ email });
+};
+
 UserSchema.methods.authenticate = function authenticate(candidatePassword) {
   return new Promise(function(resolve, reject) {
     bcrypt.compare(candidatePassword, this.password, function(err, res) {

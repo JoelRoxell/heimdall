@@ -15,6 +15,7 @@ module.exports = function validateFields(requiredFields) {
 
       const validationRes = Object.keys(requiredFields).map(field => {
         if (!fields.hasOwnProperty(field)) {
+          // FIXME: refactor error instantiations.
           return new ValidationError({
             field: field,
             type: requiredFields[field].type,

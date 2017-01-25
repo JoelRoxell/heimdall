@@ -23,7 +23,7 @@ describe('validate fields util', () => {
           password: 123456
         }
       }
-    }
+    };
 
     try {
       await validator(ctx, () => {});
@@ -51,7 +51,7 @@ describe('validate fields util', () => {
           password: 123456
         }
       }
-    }
+    };
 
     try {
       await validator(ctx, () => {});
