@@ -1,11 +1,14 @@
 'use strict';
 
 const sinon = require('sinon');
+const expect = require('chai').expect;
+const mongoose = require('mongoose');
 
-const { expect } = require('../utils/test-helper');
 const UserModel = require('./user-model');
 const JWTModel = require('./jwt-model');
 const encrypt = require('../utils/encrypt');
+
+mongoose.Promise = global.Promise;
 
 describe('User model', () => {
   it('should require an email', () => {

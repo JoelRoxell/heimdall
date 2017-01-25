@@ -1,8 +1,8 @@
 'use strict';
 
+const expect = require('chai').expect;
+
 const jwtUtil = require('./jwt-util');
-const expect = require('./test-helper').expect;
-const jwt = require('jsonwebtoken');
 
 describe('jwt util', () => {
   let token;
@@ -48,5 +48,5 @@ describe('jwt util', () => {
     } catch (e) {
       expect(e.message).to.equal('jwt expired');
     }
-  })
+  });
 });

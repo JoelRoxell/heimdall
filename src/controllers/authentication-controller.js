@@ -1,16 +1,20 @@
+'use strict';
+
 const Router = require('koa-router');
+
+const validateFields = require('../utils/validate-fields');
 
 const authenticateCtrl = new Router();
 
-function signIn(ctx, next) {
+async function signIn(ctx, next) {
   ctx.body = 'Sign in';
 }
 
-function signOut(ctx) {
+async function signOut(ctx) {
   ctx.body = 'terminated';
 }
 
-authenticateCtrl.post('/sign-out', signIn);
+authenticateCtrl.post('/sign-in', validateFields(['email', 'password']), signIn);
 authenticateCtrl.post('/sign-out', signOut);
 
 module.exports = {

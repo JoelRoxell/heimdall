@@ -2,8 +2,8 @@
 
 const MongooseError = require('mongoose').Error;
 const sinon = require('sinon');
+const expect = require('chai').expect;
 
-const { expect } = require('../utils/test-helper');
 const registerUser = require('./user-controller').registerUser;
 const factory = require('../utils/factory');
 const encrypt = require('../utils/encrypt');

@@ -1,7 +1,7 @@
 'use-strict';
 
 const factory = require('./factory');
-const expect = require('./test-helper').expect;
+const expect = require('chai').expect;
 
 describe('factory', function() {
   it('should create a new model', () => {

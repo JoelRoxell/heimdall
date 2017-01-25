@@ -1,6 +1,6 @@
 'use strict';
 
-const { expect } = require('../utils/test-helper');
+const expect = require('chai').expect;
 
 const JWTModel = require('./jwt-model');
 
