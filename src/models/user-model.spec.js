@@ -22,7 +22,9 @@ describe('User model', () => {
     const user = new UserModel({ email: 'test@test.c' });
     const validation = user.validateSync();
 
-    expect(validation.errors.email.message).to.equal('Email must be a valid email address');
+    expect(validation.errors.email.message)
+      .to
+      .equal('Email must be a valid email address');
   });
 
   it('should disallow invalid records from being persisted', done => {
@@ -69,6 +71,33 @@ describe('User model', () => {
           expect(res).to.equal(true);
           done();
         });
+    });
+  });
+
+  it('should transform JSON output', () => {
+    const user = UserModel({
+      email: 'test@test.com',
+      password: 'testPassword'
+    });
+    const json = user.toJSON();
+
+    expect(json).to.deep.equal({
+      email: 'test@test.com'
+    });
+  });
+
+  it('should find user by email', () => {
+    const findByEmail = sinon.stub(UserModel, 'findOne');
+
+    findByEmail.returns(UserModel({
+      email: 'test@test.com',
+      password: 'testPassword'
+    }));
+
+    const user = UserModel.findByEmail('test@test.com');
+
+    expect(user.toJSON()).to.deep.equal({
+      email: 'test@test.com'
     });
   });
 });

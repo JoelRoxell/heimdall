@@ -18,15 +18,7 @@ async function registerUser(ctx, next) {
     password
   });
 
-  try {
-    ctx.body = await newUser.save();
-  } catch (e) {
-    e instanceof MongooseError ?
-      e.status = 400 :
-      e.status = 500;
-
-    throw e;
-  }
+  ctx.body = await newUser.save();
 }
 
 async function getUser(ctx) {
@@ -42,11 +34,7 @@ async function sendPasswordResetToken(ctx) {
 async function resetPassword(ctx) {
   let user;
 
-  try {
-    user = await UserModel.findById(ctx.request.token.sub);
-  } catch (error) {
-    throw error;
-  }
+  user = await UserModel.findById(ctx.request.token.sub);
 
   user.password = ctx.request.body.password;
 

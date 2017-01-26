@@ -10,4 +10,16 @@ describe('JWT model', () => {
 
     expect(jwt).to.have.property('sub');
   });
+
+  it('toJSON should remove _id attr', () => {
+    const jwt = new JWTModel({
+      sub: 'test'
+    });
+
+    const json = jwt.toJSON();
+
+    expect(json).to.deep.equal({
+      sub: 'test'
+    });
+  });
 });

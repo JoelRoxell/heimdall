@@ -14,11 +14,9 @@ async function signIn(ctx, next) {
   const valid = await user.authenticate(password);
 
   if (!valid) {
-    const error = new Error('authentication failed');
+    ctx.status = 401;
 
-    error.status = 401;
-
-    throw error;
+    throw new Error('authentication failed');
   }
 
   const tokenPayload = factory.create('Jwt', {
