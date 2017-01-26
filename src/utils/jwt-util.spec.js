@@ -50,4 +50,55 @@ describe('jwt util', () => {
       expect(e.message).to.equal('jwt expired');
     }
   });
+
+  it('should fail to create a token', async () => {
+    try {
+      token = await jwtUtil.createToken();
+    } catch (err) {
+      expect(err).to.exist;
+    }
+  });
+
+  describe('verify token middleware', () => {
+    it('should require a signed token through middleware', async () => {
+      const ctx = {
+        headers: {
+          authorization: 'Bearer ' + token
+        },
+        request: {}
+      };
+
+      await jwtUtil.requireSignedToken(ctx, () => {});
+
+      expect(ctx.request.token).to.exist;
+    });
+
+    it('should fail with no authorization header', async () => {
+      const ctx = {
+        headers: {},
+        request: {}
+      };
+
+      try {
+        await jwtUtil.requireSignedToken(ctx, () => {});
+      } catch(_) {
+        expect(ctx.status).to.equal(400);
+      }
+    });
+
+    it('should fail with wrong authorization header', async () => {
+      const ctx = {
+        headers: {
+          authorization: 'WrongType ' + token
+        },
+        request: {}
+      };
+
+      try {
+        await jwtUtil.requireSignedToken(ctx, () => {});
+      } catch(_) {
+        expect(ctx.status).to.equal(400);
+      }
+    });
+  });
 });
