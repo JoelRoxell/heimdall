@@ -25,13 +25,15 @@ module.exports = function validateFields(requiredFields) {
 
         const Type = requiredFields[field].type;
         const getType = Object.prototype.toString;
-        const isCorrectType = getType.call(fields[field]) === getType.call(new Type());
+        const isCorrectType =
+          getType.call(fields[field]) === getType.call(new Type());
 
         if (!isCorrectType) {
           return new ValidationError({
             field,
             type: requiredFields[field].type,
-            message: requiredFields[field].message || `Wrong type was passed for parameter ${field}`,
+            message: requiredFields[field].message ||
+              `Wrong type was passed for parameter ${field}`,
             input: fields[field]
           });
         }
@@ -41,7 +43,7 @@ module.exports = function validateFields(requiredFields) {
       if (validationRes.length) {
         const error = new Error('Request body did not pass validation');
 
-        error.status = 400;
+        ctx.status = 400;
         error.errors = validationRes;
 
         throw error;

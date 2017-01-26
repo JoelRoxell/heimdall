@@ -9,7 +9,7 @@
   ],
   "rules": {
     "eqeqeq": 0,
-    "max-len": [2, 120, 2],
+    "max-len": [2, 80, 2],
     "strict": "error",
     "semi" : [2, "always"],
     "quotes": [2, "single", {

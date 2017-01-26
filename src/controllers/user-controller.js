@@ -5,6 +5,8 @@ const MongooseError = require('mongoose').Error;
 
 const validateFields = require('../utils/validate-fields');
 const factory = require('../utils/factory');
+const UserModel = require('../models/user-model');
+const jwtUtil = require('../utils/jwt-util');
 
 const userCtrl = new Router();
 
@@ -27,16 +29,22 @@ async function registerUser(ctx, next) {
   }
 }
 
-const validator = validateFields({
+async function getUser(ctx) {
+  const user = await UserModel.findById(ctx.request.token.sub);
+
+  ctx.body = user.toJSON();
+}
+
+userCtrl.post('/register', validateFields({
   email: {
     type: String
   },
   password: {
     type: String
   }
-});
+}), registerUser);
 
-userCtrl.post('/register', validator, registerUser);
+userCtrl.get('/', jwtUtil.requireSignedToken, getUser);
 
 module.exports = {
   router: userCtrl,

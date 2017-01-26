@@ -13,8 +13,6 @@ heimdall.use(async function errorHandler(ctx, next) {
   try {
     await next();
   } catch (e) {
-    ctx.status = e.status || 500;
-
     if (!process.env.NODE_ENV !== 'production') {
       ctx.body = {
         error: e.message
