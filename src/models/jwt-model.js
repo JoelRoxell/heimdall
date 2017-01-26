@@ -6,7 +6,10 @@ const Schema = mongoose.Schema;
 const JWTSchema = new Schema({
   sub: String,
   exp: Number,
-  data: Schema.Types.Mixed
+  data: {
+    email: String,
+    grants: Schema.Types.Mixed
+  }
 });
 
 // Remove _id from JSON convertions.

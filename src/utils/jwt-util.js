@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const key = process.env.SECRET;
 
-exports.createToken = function createToken(payload, opt = {}) {
+function createToken(payload, opt = {}) {
   return new Promise(function(resolve, reject) {
     jwt.sign(payload, key, opt, (err, token) => {
       if (err) reject(err);
@@ -13,9 +13,7 @@ exports.createToken = function createToken(payload, opt = {}) {
   });
 };
 
-let verifyToken;
-
-exports.verify = verifyToken = function verifyToken(token) {
+function verifyToken(token) {
   return new Promise(function(resolve, reject) {
     jwt.verify(token, key, (err, decodedToken) => {
       if (err) reject(err);
@@ -24,13 +22,13 @@ exports.verify = verifyToken = function verifyToken(token) {
   });
 };
 
-exports.requireSignedToken = async function requireSignedToken(ctx, next) {
+async function requireSignedToken(ctx, next) {
   const authHeader = ctx.headers.authorization;
 
   if(!authHeader) {
     ctx.status = 400;
 
-    throw new Error('No autohrizatin header was passed with the request');
+    throw new Error('No autohrizatin header was passed in the request');
   }
 
   const [type, encodeToken] = authHeader.split(' ');
@@ -47,3 +45,7 @@ exports.requireSignedToken = async function requireSignedToken(ctx, next) {
 
   await next();
 };
+
+exports.createToken = createToken;
+exports.requireSignedToken = requireSignedToken;
+exports.verify = verifyToken;

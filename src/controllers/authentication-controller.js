@@ -14,7 +14,7 @@ async function signIn(ctx, next) {
   const valid = await user.authenticate(password);
 
   if (!valid) {
-    const error = new Error('Authentication failed');
+    const error = new Error('authentication failed');
 
     error.status = 401;
 
@@ -23,8 +23,17 @@ async function signIn(ctx, next) {
 
   const tokenPayload = factory.create('Jwt', {
     sub: user._id,
-    exp: Math.floor(Date.now() / 1000) + (60 * process.env.TOKEN_EXP_MINUTES || 15),
-    data: user.toJSON()
+    exp: Math.floor(Date.now() / 1000) +
+      (60 * process.env.TOKEN_EXP_MINUTES || 15),
+    data: {
+      email: user.email,
+      grants: {
+        auth: {
+          signin: true,
+          reset: true
+        }
+      }
+    }
   });
 
   const signedToken = await jwtUtil.createToken(tokenPayload.toJSON());

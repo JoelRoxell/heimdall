@@ -6,7 +6,7 @@ const MongooseError = require('mongoose').Error;
 const validateFields = require('../utils/validate-fields');
 const factory = require('../utils/factory');
 const UserModel = require('../models/user-model');
-const jwtUtil = require('../utils/jwt-util');
+const { requireSignedToken } = require('../utils/jwt-util');
 
 const userCtrl = new Router();
 
@@ -34,6 +34,32 @@ async function getUser(ctx) {
 
   ctx.body = user.toJSON();
 }
+  // TODO: implement mail verification.
+async function sendPasswordResetToken(ctx) {
+  ctx.status = 501;
+}
+
+async function resetPassword(ctx) {
+  debugger;
+
+  let user;
+
+  try {
+    user = await UserModel.findById(ctx.request.token.sub);
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
+
+  user.password = ctx.request.body.password;
+
+  console.log(user);
+
+  const updatedUser = await user.save();
+
+  ctx.body = updatedUser;
+}
 
 userCtrl.post('/register', validateFields({
   email: {
@@ -44,9 +70,21 @@ userCtrl.post('/register', validateFields({
   }
 }), registerUser);
 
-userCtrl.get('/', jwtUtil.requireSignedToken, getUser);
+userCtrl.get('/', requireSignedToken, getUser);
+userCtrl.put('/reset-password',
+  validateFields({
+    password: {
+      type: String,
+      message: 'password is a required parameter'
+    }
+  }),
+  requireSignedToken,
+  resetPassword
+);
+userCtrl.post('/rest-password', sendPasswordResetToken);
 
 module.exports = {
   router: userCtrl,
-  registerUser
+  registerUser,
+  sendPasswordResetToken
 };
