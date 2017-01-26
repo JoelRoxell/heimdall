@@ -11,46 +11,64 @@ const { signIn, signOut } = require('./authentication-controller');
 
 describe('authenticateCtrl', () => {
   let ctx;
-  let user;
+  let create;
 
   beforeEach(() => {
+    create = sinon.stub(factory, 'create');
+
     ctx = {
       request: {
         body: {}
       },
       body: {}
     };
+
+    create.returns({
+      sub: 'test-1111',
+      exp: Math.floor(Date.now() / 1000) +
+        (60 * process.env.TOKEN_EXP_MINUTES || 15),
+      data: {
+        email: {
+          email: 'test@test.com'
+        },
+        grants: {
+          auth: {
+            signin: true,
+            reset: true
+          }
+        }
+      },
+      toJSON() {
+        return {
+          email: 'test@test.com',
+          password: '123456'
+        };
+      }
+    });
   });
 
-  it('should authenticate a user and recieve a encoded token', async () => {
+  afterEach(() => {
+    create.restore();
+  });
+
+  it('should sign in', async () => {
+    const findByEmail = sinon.stub(UserModel, 'findByEmail');
+
+    findByEmail.returns({
+      email: 'test@test.com',
+      password: '123456',
+      authenticate() { return Promise.resolve(true); }
+    });
+
     ctx.request.body = {
       email: 'test@test.com',
       password: '123456'
     };
 
-    const mockUser = new UserModel({
-      email: 'test@test.com',
-      password: '123456'
-    });
+    await signIn(ctx);
 
-    const findByEmail = sinon.stub(UserModel, 'findByEmail');
+    findByEmail.restore();
 
-    findByEmail.returns(Promise.resolve(mockUser));
-
-    encrypt.call(mockUser, async () => {
-      try {
-        await signIn(ctx);
-      } catch (e) {
-        throw e;
-      }
-
-      const decodedToken = await jwtUtil.verify(ctx.body);
-
-      findByEmail.restore();
-
-      expect(decodedToken).to.have.property('sub');
-      expect(decodedToken).to.have.property('iat');
-      expect(decodedToken).to.have.property('exp');
-    });
+    expect(ctx.body).to.have.property('token');
   });
 });

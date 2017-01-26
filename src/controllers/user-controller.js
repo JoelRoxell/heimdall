@@ -40,21 +40,15 @@ async function sendPasswordResetToken(ctx) {
 }
 
 async function resetPassword(ctx) {
-  debugger;
-
   let user;
 
   try {
     user = await UserModel.findById(ctx.request.token.sub);
   } catch (error) {
-    console.log(error);
-
     throw error;
   }
 
   user.password = ctx.request.body.password;
-
-  console.log(user);
 
   const updatedUser = await user.save();
 
@@ -86,5 +80,7 @@ userCtrl.post('/rest-password', sendPasswordResetToken);
 module.exports = {
   router: userCtrl,
   registerUser,
-  sendPasswordResetToken
+  sendPasswordResetToken,
+  getUser,
+  resetPassword
 };

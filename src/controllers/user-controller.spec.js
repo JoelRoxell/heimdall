@@ -4,26 +4,34 @@ const MongooseError = require('mongoose').Error;
 const sinon = require('sinon');
 const expect = require('chai').expect;
 
-const registerUser = require('./user-controller').registerUser;
+const UserModel = require('../models/user-model');
+const { registerUser, getUser, resetPassword } = require('./user-controller');
 const factory = require('../utils/factory');
 const encrypt = require('../utils/encrypt');
 
 describe('user-controller', () => {
   let ctx;
-  let create;
   let userParams;
 
-  // FIXME: Refactor and stub this test correctly.
-  xdescribe('register', () => {
-    beforeEach(function() {
-      ctx = {
-        request: {
-          body: {}
-        },
-        body: {}
-      };
+  beforeEach(function() {
+    ctx = {
+      request: {
+        body: {},
+        token: {
+          sub: 123
+        }
+      },
+      body: {}
+    };
+  });
 
+  // FIXME: Refactor and stub this test correctly.
+  describe('register', () => {
+    let create;
+
+    beforeEach(function() {
       create = sinon.stub(factory, 'create');
+
       userParams = {
         email: 'test@test.com',
         password: 'someTestPassword',
@@ -41,54 +49,62 @@ describe('user-controller', () => {
       create.returns(userParams);
     });
 
-    after(function() {
+    afterEach(() => {
       create.restore();
     });
 
     it('should register a user', async function() {
-      try {
-        ctx.request.body = {
-          email: 'test@test.com',
-          password: 'someTestPassword'
-        };
+      ctx.request.body = {
+        email: 'test@test.com',
+        password: 'someTestPassword'
+      };
 
-        await registerUser(ctx, () => {});
+      await registerUser(ctx, () => {});
 
-        expect(ctx.body.email).to.equal(ctx.request.body.email);
-        expect(ctx.body).to.have.property('password');
-      } catch (err) {
-        throw err;
+      expect(ctx.body.email).to.equal(ctx.request.body.email);
+      expect(ctx.body).to.have.property('password');
+    });
+  });
+
+  it('should get user info', async () => {
+    const findById = sinon.stub(UserModel, 'findById');
+
+    findById.returns({
+      email: 'test@test.com',
+      toJSON() {
+        return { email: 'test@test.com' };
       }
     });
 
-    it('should fail to register a user: email', async () => {
-      try {
-        ctx.request.body = {
-          email: 'test@test.c',
-          password: 'someTestPassword'
-        };
+    await getUser(ctx);
 
-        await registerUser(ctx, () => {});
-      } catch (e) {
-        console.log(e);
-        if (e instanceof MongooseError) {
-          expect(e.errors.email.message).to.equal('Email must be a valid email address');
-        } else {
-          throw e;
-        }
+    findById.restore();
+    expect(ctx.body).to.have.property('email', 'test@test.com');
+  });
+
+  it('should reset user password', async () => {
+    ctx.request.body.password = 'abc123';
+
+    const findById = sinon.stub(UserModel, 'findById');
+
+    findById.returns({
+      email: 'test@test.com',
+      toJSON() {
+        return { email: 'test@test.com' };
+      },
+      save() {
+        return new Promise((resolve, reject) => {
+          encrypt.call(ctx.request.body, () => {
+            resolve(Object.assign(
+              ctx.request.body
+            ));
+          });
+        });
       }
     });
 
-    it('should fail to register a user: password', async () => {
-      try {
-        ctx.request.body = {
-          email: 'test@test.c'
-        };
+    await resetPassword(ctx);
 
-        await registerUser(ctx, () => {});
-      } catch (e) {
-        expect(e.message).to.equal('Missing password parameter');
-      }
-    });
+    expect(ctx.body.password.length > 10).to.equal(true);
   });
 });
