@@ -16,7 +16,9 @@ heimdall.use(async function errorHandler(ctx, next) {
     ctx.status = e.status || 500;
 
     if (!process.env.NODE_ENV !== 'production') {
-      ctx.body = e.message;
+      ctx.body = {
+        error: e.message
+      };
     }
   }
 });
@@ -29,3 +31,4 @@ heimdall.use(controllers.routes());
 heimdall.listen(process.env.PORT, function() {
   console.log('heimdall is running');
 });
+

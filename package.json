@@ -4,6 +4,7 @@
   "description": "Microservice boilerplate for Node.js applications, to quickly spin up new services.",
   "main": "src/heimdall.js",
   "scripts": {
+    "start": "docker-compose up",
     "test": "docker exec -it $(./scripts/containername.sh) bash ./scripts/test.sh",
     "test:debug": "docker exec -it $(./scripts/containername.sh) bash ./scripts/test-debug.sh",
     "cov": "docker exec -it $(./scripts/containername.sh) bash ./scripts/coverage.sh",

@@ -32,6 +32,7 @@ UserSchema.options.toJSON.transform = function toJSON(doc, ret, options) {
   delete ret._id;
   delete ret.password;
   delete ret.jwts;
+  delete ret.__v;
 
   return ret;
 };

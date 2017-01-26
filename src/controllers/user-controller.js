@@ -1,26 +1,15 @@
 'use strict';
 
 const Router = require('koa-router');
+const MongooseError = require('mongoose').Error;
 
+const validateFields = require('../utils/validate-fields');
 const factory = require('../utils/factory');
 
-const MongooseError = require('mongoose').Error;
 const userCtrl = new Router();
-
-async function getServiceStatus(ctx, next) {
-  ctx.body = 'heimdall is running';
-}
 
 async function registerUser(ctx, next) {
   const { email, password } = ctx.request.body;
-
-  if (!email) {
-    throw new Error('Missing email parameter');
-  }
-
-  if (!password) {
-    throw new Error('Missing password parameter');
-  }
 
   const newUser = factory.create('User', {
     email,
@@ -38,11 +27,18 @@ async function registerUser(ctx, next) {
   }
 }
 
-userCtrl.get('/', getServiceStatus);
-userCtrl.post('/register', registerUser);
+const validator = validateFields({
+  email: {
+    type: String
+  },
+  password: {
+    type: String
+  }
+});
+
+userCtrl.post('/register', validator, registerUser);
 
 module.exports = {
   router: userCtrl,
-  getServiceStatus,
   registerUser
 };
