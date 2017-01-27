@@ -1,25 +1,26 @@
-# Heimdall
+# Heimdall(beta)
 > Authentication microservice.
 
 Heimdall is a minimal authentication service tailored for dockerized development and deployment.
 
 *Maintainer: Joel Roxell &lt;joel.roxell@na-kd.com&gt;*
 
+[TL;DR](#api)
+
 ## TOC
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Dependencies](#dependencies)
+- [Environment](#environment)
 - [API](#api)
-	- [Post logs](#post-logs)
   - [Register a User](#register-a-user)
+  - [Get User information](#get-user-information)
   - [Sign in](#sign-in)
   - [Reset User password](#reset-user-password)
 - [Development](#development)
 	- [Prerequisites](#prerequisites)
 	- [Setup](#setup)
 	- [Tools & Scripts](#tools-scripts)
-- [Environment](#environment)
-- [Contributing](#contributing)
 
 <!-- /TOC -->
 
@@ -27,10 +28,15 @@ Heimdall is a minimal authentication service tailored for dockerized development
 - Redis
 - MongoDB
 
-## API
-This service provides a JSON REST API.
+## Environment
+| **VARIABLE**         | **DESCRIPTION**                                                       |
+|---------------------:|-----------------------------------------------------------------------|
+|**NODE_ENV**          | Sets the application to either **production** or **development** mode |
+|**SECRET**            | Secret which is used to sign and verify JWTs                          |
+|**SALT_ROUNDS**       | Amount of rounds that bcrypt should use on encryption                 |
+|**TOKEN_TTL**         | Minutes before a token expires                                        |
 
-## Routes
+## API
 | METHOD | URI                  | ERROR CODE | SUCCESS CODE | OUTPUT         |
 |:------:|:---------------------|:----------:|:------------:|----------------|
 | POST   | /user/register       | 400, 409   | 201          | User           |
@@ -40,6 +46,7 @@ This service provides a JSON REST API.
 
 ### Register a User
 **POST /user/register**
+
 Creates a new User
 
 **HEADERS**
@@ -81,6 +88,7 @@ HTTP 409 - *User Already exists*
 
 ### Get User information
 **GET /user**
+
 Returns a JSON string containing user information.
 
 **HEADERS**
@@ -106,6 +114,7 @@ HTTP 403 - *Invalid JWT*
 
 ### Sign in
 **GET /user/sign-in**
+
 Returnes a encoded JWT on success.
 
 **HEADERS**
@@ -138,6 +147,7 @@ HTTP 401 - *Invalid credentials*
 
 ### Reset User password
 **GET /user/reset-password**
+
 Sets a new password for the specific User and returnes the updated User.
 
 **HEADERS**
@@ -154,7 +164,7 @@ HTTP 200 - *User was created successfully*
 }
 ```
 
-HTTP 400 - *Invalid JWT*
+HTTP 400 - *Invalid request body*
 ```json
 {
   "error": "request body did not pass validation"
@@ -196,20 +206,6 @@ mounted into the container and the server will be restarted on save.
 |**npm run bash**       |Enters the container with bash                       |The container must be running
 |**npm run reinstall**  |Installs dependencies using yarn inside the container|The container must be running
 
-## Environment
-
-| **VARIABLE**         | **DESCRIPTION**                                                       |
-|---------------------:|-----------------------------------------------------------------------|
-|**NODE_ENV**          | Sets the application to either **production** or **development** mode |
-|**SECRET**            | Secret wich is used to sign and verify JWTs                           |
-|**SALT_ROUNDS**       | Sets the application to either **production** or **development** mode |
-|**TOKEN_TTL**         | Minutes before a token is considered expired                          |
-
-## Contributing
-This service has the following standards & workflows:
-* Master branch should always be ready to deploy to production
-* Pull requests with failing tests will be closed.
-* This document should be filled out and up to date.
 
 ### Testing
 Tests should be easy to read. You can use this standard when writing tests.
