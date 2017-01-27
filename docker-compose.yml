@@ -13,6 +13,7 @@ services:
       - ./package.json:/home/node/app/package.json
       - ./.nycrc:/home/node/app/.nycrc
       - ./coverage:/home/node/app/coverage
+      - ./resources/log:/home/node/app/log
     ports:
       - 80:8000
       - 9229:9229
