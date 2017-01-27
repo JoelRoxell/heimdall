@@ -22,7 +22,7 @@ async function signIn(ctx, next) {
   const tokenPayload = factory.create('Jwt', {
     sub: user._id,
     exp: Math.floor(Date.now() / 1000) +
-      (60 * process.env.TOKEN_EXP_MINUTES || 15),
+      (60 * process.env.TOKEN_TTL || 60),
     data: {
       email: user.email,
       grants: {

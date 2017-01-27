@@ -13,16 +13,20 @@ heimdall.use(async function errorHandler(ctx, next) {
   try {
     await next();
   } catch (e) {
-    if (!process.env.NODE_ENV !== 'production') {
-      ctx.body = {
-        error: e.message
-      };
-    }
+    ctx.body = {
+      error: e.message
+    };
   }
 });
 
 heimdall.use(accesslog());
-heimdall.use(bodyParser());
+heimdall.use(bodyParser({
+  onerror: function(_, ctx) {
+    ctx.status = 422;
+
+    throw new Error('can not parse request body');
+  }
+}));
 
 heimdall.use(controllers.routes());
 
