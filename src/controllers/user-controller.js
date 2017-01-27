@@ -1,7 +1,6 @@
 'use strict';
 
 const Router = require('koa-router');
-const MongooseError = require('mongoose').Error;
 
 const validateFields = require('../utils/validate-fields');
 const factory = require('../utils/factory');
@@ -18,10 +17,25 @@ async function registerUser(ctx, next) {
     password
   });
 
-  ctx.body = await newUser.save();
+  try {
+    const registredUser = await newUser.save();
+
+    ctx.status = 201;
+    ctx.body = registredUser;
+  } catch(err) {
+    console.log(err);
+    if(err.code === 11000) {
+      ctx.status = 409;
+      err.message = 'a user with that email already exists';
+    }
+
+    throw err;
+  }
 }
 
 async function getUser(ctx) {
+  console.log('ctx');
+
   const user = await UserModel.findById(ctx.request.token.sub);
 
   ctx.body = user.toJSON();

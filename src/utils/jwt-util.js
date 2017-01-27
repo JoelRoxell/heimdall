@@ -39,10 +39,15 @@ async function requireSignedToken(ctx, next) {
     throw new Error('Authorization header is of wrong type');
   }
 
-  const decodedToken = await verifyToken(encodeToken);
+  try {
+    const decodedToken = await verifyToken(encodeToken);
 
-  ctx.request.token = decodedToken;
+    ctx.request.token = decodedToken;
+  } catch (err) {
+    ctx.status = 403;
 
+    throw err;
+  }
   await next();
 };
 
