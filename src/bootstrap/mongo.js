@@ -9,12 +9,13 @@ function initMongo() {
   return new Promise(function(resolve, reject) {
     if (mongoose.connection.readyState > 0) {
       debug('already connected.');
+
       return;
     }
 
     mongoose.Promise = global.Promise;
 
-    mongoose.connect(`mongodb://mongo/authentication_${db}`).catch(err => {
+    mongoose.connect(`mongodb://mongo/auth_${db}`).catch(err => {
       debug(err);
       reject(err);
     });

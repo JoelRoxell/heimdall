@@ -146,7 +146,7 @@ HTTP 401 - *Invalid credentials*
 
 
 ### Reset User password
-**GET /user/reset-password**
+**PUT /user/reset-password**
 
 Sets a new password for the specific User and returnes the updated User.
 

@@ -1,6 +1,5 @@
 'use strict';
 
-const MongooseError = require('mongoose').Error;
 const sinon = require('sinon');
 const expect = require('chai').expect;
 

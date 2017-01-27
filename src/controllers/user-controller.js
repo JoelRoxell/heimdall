@@ -23,7 +23,6 @@ async function registerUser(ctx, next) {
     ctx.status = 201;
     ctx.body = registredUser;
   } catch(err) {
-    console.log(err);
     if(err.code === 11000) {
       ctx.status = 409;
       err.message = 'a user with that email already exists';
@@ -34,13 +33,11 @@ async function registerUser(ctx, next) {
 }
 
 async function getUser(ctx) {
-  console.log('ctx');
-
   const user = await UserModel.findById(ctx.request.token.sub);
 
   ctx.body = user.toJSON();
 }
-  // TODO: implement mail verification.
+  // TODO: implement mail verification/password reset.
 async function sendPasswordResetToken(ctx) {
   ctx.status = 501;
 }

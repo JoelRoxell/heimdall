@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 const factory = require('./factory');
 const expect = require('chai').expect;

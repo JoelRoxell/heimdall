@@ -3,11 +3,9 @@
 const sinon = require('sinon');
 const expect = require('chai').expect;
 const UserModel = require('../models/user-model');
-const encrypt = require('../utils/encrypt');
-const jwtUtil = require('../utils/jwt-util');
 
+const { signIn } = require('./authentication-controller');
 const factory = require('../utils/factory');
-const { signIn, signOut } = require('./authentication-controller');
 
 describe('authenticateCtrl', () => {
   let ctx;
