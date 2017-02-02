@@ -195,17 +195,17 @@ mounted into the container and the server will be restarted on save.
 
 ### Tools & Scripts
 
-| **SCRIPT**            | **USAGE**                                           | **CAVEATS**
-|----------------------:|-----------------------------------------------------|-------------
-|**npm test**           |Runs all unit tests using mocha                      |The container must be running
-|**npm run test:watch** |Runs all unit tests and watches for changes          |The container must be running
-|**npm run test:debug** |Runs all unit tests and watches with node --inspect  |The container must be running
-|**npm run cov**        |Runs all unit tests and generates coverage           |The container must be running
-|**npm run open:cov**   |Opens the code coverage report in the default browser|The container must be running
-|**npm run precommit**  |Runs eslint just like the git precommit hook does    |-
-|**npm run bash**       |Enters the container with bash                       |The container must be running
-|**npm run reinstall**  |Installs dependencies using yarn inside the container|The container must be running
-
+| **SCRIPT**             | **USAGE**                                           | **CAVEATS**
+|-----------------------:|-----------------------------------------------------|-------------
+|**npm test**            |Runs all unit tests using mocha                      |The container must be running.
+|**npm run test:watch**  |Runs all unit tests and watches for changes          |The container must be running.
+|**npm run test:debug**  |Runs all unit tests and watches with node --inspect  |The container must be running.
+|**npm run cov**         |Runs all unit tests and generates coverage           |The container must be running.
+|**npm run open:cov**    |Opens the code coverage report in the default browser|The container must be running.
+|**npm run precommit**   |Runs eslint just like the git precommit hook does    |-
+|**npm run bash**        |Enters the container with bash                       |The container must be running.
+|**npm run reinstall**   |Installs dependencies using yarn inside the container|The container must be running.
+|**npm run generate:pem**|Generates a new .pem and .pub file used to sign JWTs |Requers the container to be rebooted.
 
 ### Testing
 Tests should be easy to read. You can use this standard when writing tests.

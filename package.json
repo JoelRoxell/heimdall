@@ -12,6 +12,7 @@
     "precommit": "./node_modules/.bin/eslint src/",
     "bash": "docker exec -it $(./scripts/containername.sh) bash",
     "reinstall": "docker exec -it $(./scripts/containername.sh) ./scripts/reinstall.sh",
+    "generate:pem": "docker exec -it $(./scripts/containername.sh) bash ./scripts/generate-keys.sh",
     "open:cov": "python -m webbrowser \"coverage/lcov-report/index.html\""
   },
   "repository": {
@@ -49,6 +50,7 @@
     "debug": "^2.6.0",
     "eslint-plugin-promise": "^3.4.0",
     "jsonwebtoken": "^7.2.1",
+    "kafka-node": "^1.3.3",
     "koa": "^2.0.0",
     "koa-accesslog": "^0.0.2",
     "koa-bodyparser": "^3.2.0",

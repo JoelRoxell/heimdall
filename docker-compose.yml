@@ -7,20 +7,23 @@ services:
     environment:
       NODE_ENV: 'development'
       PORT: 8000
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 2181
     volumes:
       - ./src:/home/node/app/src
       - ./scripts:/home/node/app/scripts
+      - ./.ssh:/home/node/app/.ssh
       - ./package.json:/home/node/app/package.json
       - ./.nycrc:/home/node/app/.nycrc
       - ./coverage:/home/node/app/coverage
       - ./resources/log:/home/node/app/log
+    links:
+      - kafka
+      - kafka_manager
     ports:
       - 80:8000
       - 9229:9229
       - 9223:9223
-    links:
-      - mongo
-      - redis
 
   mongo:
     image: mongo:latest
@@ -31,3 +34,24 @@ services:
 
   redis:
     image: redis
+
+  kafka:
+    image: spotify/kafka
+    environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+      JMX_PORT: 7203
+    ports:
+      - 2181:2181 # Zookeeper
+      - 9092:9092 # Kafka
+      - 7203:7203 # JMX
+
+  kafka_manager:
+    image: sheepkiller/kafka-manager
+    environment:
+      ZK_HOSTS: 'kafka:2181'
+      JMX_PORT: 7203
+    links:
+      - kafka
+    ports:
+      - 3001:9000

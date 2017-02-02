@@ -5,6 +5,7 @@ const bodyParser = require('koa-bodyparser');
 const accesslog = require('koa-accesslog');
 
 require('./bootstrap/mongo').initMongo();
+require('./bootstrap/kafka');
 const controllers = require('./controllers');
 
 const heimdall = new Koa();
