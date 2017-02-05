@@ -15,7 +15,7 @@ function initMongo() {
 
     mongoose.Promise = global.Promise;
 
-    mongoose.connect(`mongodb://mongo/auth_${db}`).catch(err => {
+    mongoose.connect(`mongodb://db0.cluster.na-kd.com,db1.cluster.na-kd.com,db2.cluster.na-kd.com/auth_${db}?replicaSet=prod-rs0`).catch(err => {
       debug(err);
       reject(err);
     });

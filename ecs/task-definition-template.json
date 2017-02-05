@@ -1,0 +1,28 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "<PROJECT>",
+      "image": "<REPOSITORY>:<VERSION>",
+      "memory": 64,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "dockerLabels": {}
+    }
+  ],
+  "volumes": [],
+  "family": "<PROJECT>"
+}

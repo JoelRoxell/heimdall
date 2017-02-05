@@ -3,6 +3,7 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const accesslog = require('koa-accesslog');
+const router = require('koa-router')();
 
 require('./bootstrap/mongo').initMongo();
 require('./bootstrap/kafka');
@@ -16,7 +17,7 @@ const path = require('path');
 const logStream = fs.createWriteStream(path.resolve(
     __dirname,
     '..',
-    'log/access.log')
+    'log/heimdall/access.log')
   , {
     flags: 'a'
   });
@@ -39,7 +40,7 @@ heimdall.use(bodyParser({
   }
 }));
 
-heimdall.use(controllers.routes());
+heimdall.use(router.use('/heimdall', controllers.routes()).routes());
 
 heimdall.listen(process.env.PORT, function() {
   console.log('heimdall is running.');

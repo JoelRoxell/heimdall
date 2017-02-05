@@ -7,3 +7,5 @@ elif [ "$NODE_ENV" = "development" ]; then
   yarn
   DEBUG=* ./node_modules/.bin/nodemon --inspect --harmony-async-await src/heimdall.js
 fi
+
+echo "Done"
