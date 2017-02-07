@@ -1,0 +1,60 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "heimdall",
+      "image": "627653349153.dkr.ecr.eu-west-1.amazonaws.com/heimdall:latest",
+      "memory": 256,
+      "essential": true,
+      "links": [
+        "mongo:mongo"
+      ],
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "mountPoints": [{
+        "sourceVolume": "log",
+        "containerPath": "/home/node/app/log"
+      }],
+      "environment": [
+        {
+          "name": "PORT",
+          "value": "8000"
+        },
+        {
+          "name": "NODE_ENV",
+          "value": "development"
+        },
+        {
+          "name": "KAFKA_HOST",
+          "value": "kafka.cluster.na-kd.com"
+        },
+        {
+          "name": "ZOOKEEPER_PORT",
+          "value": "2181"
+        },
+        {
+          "name": "redis",
+          "value": "redis.cluster.na-kd.com"
+        }
+      ]
+    }
+  ],
+  "volumes": [
+    {
+      "name": "db",
+      "host": {
+        "sourcePath": "/data/db"
+      }
+    },
+    {
+      "name": "log",
+      "host": {
+        "sourcePath": "/var/log"
+      }
+    }
+  ],
+  "family": "heimdall"
+}

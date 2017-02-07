@@ -42,7 +42,7 @@ heimdall.use(bodyParser({
 
 heimdall.use(router.use('/heimdall', controllers.routes()).routes());
 
-heimdall.listen(process.env.PORT, function() {
+heimdall.listen(8000 || process.env.PORT, function() {
   console.log('heimdall is running.');
 });
 

@@ -6,7 +6,7 @@ services:
       NODE_ENV: 'development'
       PORT: 8000
       KAFKA_HOST: kafka
-      KAFKA_PORT: 2181
+      ZOOKEEPER_PORT: 2181
     volumes:
       - ./src:/home/node/app/src
       - ./scripts:/home/node/app/scripts

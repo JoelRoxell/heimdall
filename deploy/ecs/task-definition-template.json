@@ -1,0 +1,51 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "<PROJECT>",
+      "image": "<REPOSITORY>:<VERSION>",
+      "memory": 100,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "mountPoints": [{
+        "sourceVolume": "log",
+        "containerPath": "/home/node/app/log"
+      }],
+      "environment": [
+        {
+          "name": "PORT",
+          "value": "8000"
+        },
+        {
+          "name": "NODE_ENV",
+          "value": "development"
+        },
+        {
+          "name": "KAFKA_HOST",
+          "value": "kafka.cluster.na-kd.com"
+        },
+        {
+          "name": "ZOOKEEPER_PORT",
+          "value": "2181"
+        },
+        {
+          "name": "redis",
+          "value": "redis.cluster.na-kd.com"
+        }
+      ]
+    }
+  ],
+  "volumes": [
+    {
+      "name": "log",
+      "host": {
+        "sourcePath": "/var/log"
+      }
+    }
+  ],
+  "family": "<PROJECT>"
+}

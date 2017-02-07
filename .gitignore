@@ -7,3 +7,4 @@ resources/data/
 variables.env
 log
 .ssh
+*.pyc
