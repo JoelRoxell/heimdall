@@ -16,6 +16,7 @@ RUN yarn
 RUN mkdir -p /home/node/app && cp -a /tmp/node_modules /home/node/app/node_modules
 WORKDIR /home/node/app
 
+ADD package.json package.json
 ADD scripts ./scripts
 ADD src ./src
 ADD .nycrc .
