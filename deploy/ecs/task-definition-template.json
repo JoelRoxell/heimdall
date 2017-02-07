@@ -22,7 +22,7 @@
         },
         {
           "name": "NODE_ENV",
-          "value": "development"
+          "value": "production"
         },
         {
           "name": "KAFKA_HOST",
