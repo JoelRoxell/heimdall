@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const debug = require('debug')('mongoose');
 
-const db = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+const config = require('../config');
 
 function initMongo() {
   return new Promise(function(resolve, reject) {
@@ -15,8 +15,9 @@ function initMongo() {
 
     mongoose.Promise = global.Promise;
 
-    mongoose.connect(`mongodb://db0.cluster.na-kd.com,db1.cluster.na-kd.com,db2.cluster.na-kd.com/auth_${db}?replicaSet=prod-rs0`).catch(err => {
+    mongoose.connect(config.getConnectionString()).catch(err => {
       debug(err);
+
       reject(err);
     });
 

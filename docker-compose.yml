@@ -14,7 +14,7 @@ services:
       - ./package.json:/home/node/app/package.json
       - ./.nycrc:/home/node/app/.nycrc
       - ./coverage:/home/node/app/coverage
-      - ./resources/log:/home/node/app/log
+      - ./resources/log:/home/node/app/log/heimdall/
     links:
       - kafka
       - kafka_manager
