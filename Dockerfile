@@ -16,6 +16,11 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 # Install dev-dependencies to be able to run tests
 RUN yarn
 
+RUN ./scripts/generate-keys.sh
+COPY .ssh .ssh
+
+RUN mkdir log
+
 # Remove dev dependencies after successful test
 # This is equivalent to 'npm prune --production'
 # RUN yarn install --production --ignore-scripts --prefer-offline

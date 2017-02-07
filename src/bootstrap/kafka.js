@@ -13,13 +13,13 @@ const client = new kafka.Client(
 );
 
 const producer = new kafka.Producer(client);
-const newPkTopic = 'heimdall_new_pk';
+const newPkTopic = 'heimdall_new_pk_test';
 
 function createConsumer() {
   const consumer = new kafka.Consumer(client, [
      { topic: newPkTopic }
   ], {
-    groupId: 'heimdall_atuh_service'
+    groupId: 'heimdall_auth_service'
   });
 
   consumer.on('message', function(message) {
