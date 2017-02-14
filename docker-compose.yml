@@ -7,6 +7,9 @@ services:
       PORT: 8000
       KAFKA_HOST: kafka
       ZOOKEEPER_PORT: 2181
+      SERVICE_NAME: 'heimdall'
+      ENCRYPT: 'AZrH0TKs8rK2cFATg19VIA=='
+      START_JOIN: '172.17.0.2'
     volumes:
       - ./src:/home/node/app/src
       - ./scripts:/home/node/app/scripts
@@ -15,6 +18,7 @@ services:
       - ./.nycrc:/home/node/app/.nycrc
       - ./coverage:/home/node/app/coverage
       - ./resources/log:/home/node/app/log/heimdall/
+      - ./var/run/docker.sock:/var/run/docker.sock
     links:
       - kafka
       - kafka_manager
