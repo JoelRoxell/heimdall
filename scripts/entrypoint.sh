@@ -1,15 +1,36 @@
 #!/bin/bash
 
-bash /opt/nakd-consul/start.sh
+# Catch termination signals and forward them to the sub-process.
+handler() {
+  echo $pid
+  if [ $pid -ne 0 ]; then # 0 is the docker entrypoint
+    # tell the node process to gracefully shut down
+    kill -SIGTERM "$pid"
 
-# Leave consul cluster on exit.
-trap "consul leave; exit 0" SIGINT SIGTERM
+    # wait for it to die
+    wait "$pid"
+  fi
+  # exit 143 # 128 + 15 = SIGTERM
+}
 
+trap 'kill ${!}; handler' SIGTERM
+
+# Start consul agent
+/opt/nakd-consul/start.sh &
+
+# Start application
 if [ "${NODE_ENV}" = "production" ]; then
   echo "Running in production mode..."
-  node --harmony-async-await src/heimdall.js
+  node --harmony-async-await src/heimdall.js &
 elif [ "${NODE_ENV}" = "development" ]; then
-  DEBUG=* ./node_modules/.bin/nodemon --inspect --harmony-async-await src/heimdall.js
+  echo "Running in development mode mode..."
+  DEBUG=* ./node_modules/.bin/nodemon --inspect --harmony-async-await src/heimdall.js &
 fi
 
-echo "Done"
+pid="$!" # get the PID from the last output (started process)
+echo "Process $pid spawned"
+
+wait $pid
+
+# Leave consule cluster before termination.
+consul leave

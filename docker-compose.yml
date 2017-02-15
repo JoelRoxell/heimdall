@@ -8,7 +8,7 @@ services:
       KAFKA_HOST: kafka
       ZOOKEEPER_PORT: 2181
       SERVICE_NAME: 'heimdall'
-      ENCRYPT: 'AZrH0TKs8rK2cFATg19VIA=='
+      ENCRYPT: 'X4SYOinf2pTAcAHRhpj7dA=='
       START_JOIN: '172.17.0.2'
     volumes:
       - ./src:/home/node/app/src

@@ -1,7 +1,8 @@
-FROM joelroxell/docker-consul:0.1.1
+FROM joelroxell/docker-consul:0.2.0
 
 MAINTAINER Joel Roxell <joel.roxell@na-kd.com>
 
+# Install node
 RUN apt-get install build-essential python -y
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
 RUN apt-get install nodejs
