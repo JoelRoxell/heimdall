@@ -1,5 +1,11 @@
-FROM node:7.2.0
+FROM joelroxell/docker-consul:0.2.1
+
 MAINTAINER Joel Roxell <joel.roxell@na-kd.com>
+
+# Install node
+RUN apt-get install build-essential python -y
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN apt-get install nodejs
 
 # Install yarn to install and remove dependencies faster
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -20,6 +26,7 @@ ADD package.json package.json
 ADD scripts ./scripts
 ADD src ./src
 ADD .nycrc .
+RUN mkdir -p ./log/heimdall/
 
 RUN ./scripts/generate-keys.sh
 

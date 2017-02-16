@@ -46,3 +46,8 @@ heimdall.listen(8000 || process.env.PORT, function() {
   console.log('heimdall is running.');
 });
 
+process.on('SIGTERM', function() {
+  console.log('Shutting down gracefully...');
+
+  process.exit(0);
+});
