@@ -1,4 +1,4 @@
-FROM joelroxell/docker-consul:0.2.0
+FROM joelroxell/docker-consul:0.2.1
 
 MAINTAINER Joel Roxell <joel.roxell@na-kd.com>
 

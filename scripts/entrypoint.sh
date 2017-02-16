@@ -2,7 +2,6 @@
 
 # Catch termination signals and forward them to the sub-process.
 handler() {
-  echo $pid
   if [ $pid -ne 0 ]; then # 0 is the docker entrypoint
     # tell the node process to gracefully shut down
     kill -SIGTERM "$pid"
@@ -10,7 +9,6 @@ handler() {
     # wait for it to die
     wait "$pid"
   fi
-  # exit 143 # 128 + 15 = SIGTERM
 }
 
 trap 'kill ${!}; handler' SIGTERM

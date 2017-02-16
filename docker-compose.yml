@@ -9,7 +9,8 @@ services:
       ZOOKEEPER_PORT: 2181
       SERVICE_NAME: 'heimdall'
       ENCRYPT: 'X4SYOinf2pTAcAHRhpj7dA=='
-      START_JOIN: '172.17.0.2'
+      START_JOIN: 'consul_server'
+      SERVER: 'false'
     volumes:
       - ./src:/home/node/app/src
       - ./scripts:/home/node/app/scripts
@@ -18,14 +19,12 @@ services:
       - ./.nycrc:/home/node/app/.nycrc
       - ./coverage:/home/node/app/coverage
       - ./resources/log:/home/node/app/log/heimdall/
-      - ./var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
     links:
       - kafka
-      - kafka_manager
+      - consul_server
     ports:
       - 80:8000
-      - 9229:9229
-      - 9223:9223
 
   mongo:
     image: mongo:latest
@@ -48,12 +47,37 @@ services:
       - 9092:9092 # Kafka
       - 7203:7203 # JMX
 
-  kafka_manager:
-    image: sheepkiller/kafka-manager
+  consul_server:
+    image: joelroxell/docker-consul:0.2.1
     environment:
-      ZK_HOSTS: 'kafka:2181'
-      JMX_PORT: 7203
-    links:
-      - kafka
+      ENCRYPT: 'X4SYOinf2pTAcAHRhpj7dA=='
+      SERVER: 'true'
+      BOOTSTRAP: 'true'
+      UI: 'true'
+      BOOTSTRAP_EXPECT: 3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - 3001:9000
+      - 8500:8500
+
+  consul_server_1:
+    image: joelroxell/docker-consul:0.2.1
+    environment:
+      ENCRYPT: 'X4SYOinf2pTAcAHRhpj7dA=='
+      SERVER: 'true'
+      START_JOIN: 'consul_server'
+    links:
+      - consul_server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  consul_server_2:
+    image: joelroxell/docker-consul:0.2.1
+    environment:
+      ENCRYPT: 'X4SYOinf2pTAcAHRhpj7dA=='
+      SERVER: 'true'
+      START_JOIN: 'consul_server'
+    links:
+      - consul_server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
